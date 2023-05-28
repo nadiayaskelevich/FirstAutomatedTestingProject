@@ -5,42 +5,43 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.*;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import java.time.Duration;
 
-public class XPathHomeWork {
+public class JiraTest {
     private WebDriver driver;
     private WebDriverWait wait;
 
-    @BeforeMethod
+    @BeforeClass
     public void setUp() {
         System.setProperty("webdriver.chrome.driver", "chromedriver_mac_arm64/chromedriver");
         driver = new ChromeDriver();
         wait = new WebDriverWait(driver, Duration.ofSeconds(30));
         driver.manage().window().maximize();
-        driver.get("https://ny-auto-tests.atlassian.net/");
+        driver.get("https://ny-auto-tests.atlassian.net");
     }
 
-    @Test
-    public void quickTestWithXPath() throws InterruptedException {
-        WebElement emailField = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@id='username']")));
-        emailField.sendKeys("test_jira@bk.ru");
+    @Test(priority = 1)
+    public void login() throws InterruptedException {
+        WebElement emailField = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("username")));
+        emailField.sendKeys("ny.tests@bk.ru");
 
-        WebElement continueButton = driver.findElement(By.xpath("//*[@id='login-submit']"));
+        WebElement continueButton = driver.findElement(By.id("login-submit"));
         continueButton.click();
 
-        WebElement passwordField = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@id='password']")));
-        passwordField.sendKeys("6iv3cumFNu89Du9");
+        WebElement passwordField = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("password")));
+        passwordField.sendKeys("UaEsKI12rea(");
 
-        WebElement loginButton = driver.findElement(By.xpath("//*[@id='login-submit']"));
+        WebElement loginButton = driver.findElement(By.id("login-submit"));
         loginButton.click();
 
-        Thread.sleep(3000);//temporary solution
+        Thread.sleep(3000);
         Assert.assertEquals(driver.getTitle(), "Atlassian");
+    }
 
+    @Test(priority = 2)
+    public void clearSearchField() {
         WebElement searchField = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@data-test-id='search-dialog-input']")));
         searchField.sendKeys("board");
 
@@ -48,7 +49,10 @@ public class XPathHomeWork {
         clearSearchIcon.click();
 
         Assert.assertEquals(searchField.getText(), "");
+    }
 
+    @Test(priority = 3)
+    public void logout(){
         WebElement profileIcon = driver.findElement(By.xpath("//*[@data-test-id='ak-spotlight-target-profile-spotlight']"));
         profileIcon.click();
 
@@ -58,7 +62,7 @@ public class XPathHomeWork {
         Assert.assertTrue(driver.getCurrentUrl().contains("https://id.atlassian.com/logout"));
     }
 
-    @AfterMethod
+    @AfterClass
     public void tearDown() {
         driver.quit();
     }
