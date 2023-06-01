@@ -1,70 +1,55 @@
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.*;
-import org.testng.annotations.*;
+import net.atlassian.pages.LoginPage;
+import net.atlassian.pages.ProfileSubmenuPage;
+import net.atlassian.pages.SearchFieldPage;
+import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
-import java.time.Duration;
+import java.util.ResourceBundle;
 
-public class JiraTest {
-    private WebDriver driver;
-    private WebDriverWait wait;
+public class JiraTest extends TestBase{
+    static ResourceBundle bundle = ResourceBundle.getBundle("test");
+    private final String URL = bundle.getString("path_to_url");
+
+    private LoginPage loginPage;
+    private SearchFieldPage searchFieldPage;
+    private ProfileSubmenuPage profileSubmenuPage;
 
     @BeforeClass
-    public void setUp() {
-        System.setProperty("webdriver.chrome.driver", "chromedriver_mac_arm64/chromedriver");
-        driver = new ChromeDriver();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-        driver.manage().window().maximize();
-        driver.get("https://ny-auto-tests.atlassian.net");
+    public void preparationForTest() {
+        driver.get(URL);
+        loginPage = new LoginPage(driver);
+        searchFieldPage = new SearchFieldPage(driver);
+        profileSubmenuPage = new ProfileSubmenuPage(driver);
     }
 
     @Test(priority = 1)
     public void login() throws InterruptedException {
-        WebElement emailField = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("username")));
-        emailField.sendKeys("ny.tests@bk.ru");
 
-        WebElement continueButton = driver.findElement(By.id("login-submit"));
-        continueButton.click();
+        loginPage.enterEmail("ny.tests@bk.ru");
+        loginPage.clickContinueButton();
+        loginPage.enterPassword("UaEsKI12rea(");
+        loginPage.clickLoginButton();
+        Thread.sleep(3000);//temporary solution
 
-        WebElement passwordField = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("password")));
-        passwordField.sendKeys("UaEsKI12rea(");
-
-        WebElement loginButton = driver.findElement(By.id("login-submit"));
-        loginButton.click();
-
-        Thread.sleep(3000);
         Assert.assertEquals(driver.getTitle(), "Atlassian");
     }
 
     @Test(priority = 2)
     public void clearSearchField() {
-        WebElement searchField = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@data-test-id='search-dialog-input']")));
-        searchField.sendKeys("board");
 
-        WebElement clearSearchIcon = driver.findElement(By.xpath("//*[@aria-label='Clear search session']"));
-        clearSearchIcon.click();
+        searchFieldPage.enterValueInSearchField("value");
+        searchFieldPage.clearSearchField();
 
-        Assert.assertEquals(searchField.getText(), "");
+        Assert.assertEquals(searchFieldPage.getSearchFieldText(), "");
     }
 
     @Test(priority = 3)
     public void logout(){
-        WebElement profileIcon = driver.findElement(By.xpath("//*[@data-test-id='ak-spotlight-target-profile-spotlight']"));
-        profileIcon.click();
 
-        WebElement loginLink = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@href='/logout']")));
-        loginLink.click();
+        profileSubmenuPage.clickProfileIcon();
+        profileSubmenuPage.clickLogoutLink();
 
         Assert.assertTrue(driver.getCurrentUrl().contains("https://id.atlassian.com/logout"));
     }
-
-    @AfterClass
-    public void tearDown() {
-        driver.quit();
-    }
-
 }
