@@ -1,3 +1,4 @@
+import net.atlassian.models.IssueData;
 import net.atlassian.pages.CreateIssuePage;
 import net.atlassian.pages.SearchFieldPage;
 import net.atlassian.utils.HelpfulActions;
@@ -28,16 +29,21 @@ public class JiraTest extends BaseTest {
     }
 
     @DataProvider(name = "issueData")
-    public static Object[][] provideLoginData() {
-        return new Object[][] {{"Issue"}, {"Summary"}};
+    public static IssueData[][] provideIssueData() {
+        return new IssueData[][] {
+                {IssueData.builder().summary("Issue").description("Info").build()},
+                {IssueData.builder().summary("Summary").description("Description").build()},
+        };
     }
 
     @Test(dataProvider = "issueData")
-    public void createIssue(String summary) {
+    public void createIssue(IssueData issueData) {
         logger.info("createIssue");
 
         createIssuePage.clickCreateButton();
-        createIssuePage.enterSummary(summary);
+        createIssuePage.enterSummary(issueData.getSummary());
+        HelpfulActions.scrollToElement(super.driver, createIssuePage.getDescriptionField());
+        createIssuePage.enterDescription(super.driver, issueData.getDescription());
         createIssuePage.clickCreateIssueButton();
 
         Assert.assertTrue(createIssuePage.createdModalIsDisplayed());
