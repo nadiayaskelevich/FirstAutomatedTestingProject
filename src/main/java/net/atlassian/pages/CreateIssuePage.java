@@ -3,7 +3,6 @@ package net.atlassian.pages;
 import net.atlassian.utils.Waiters;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.support.FindBy;
 
 public class CreateIssuePage extends BasePage{
@@ -20,6 +19,9 @@ public class CreateIssuePage extends BasePage{
     @FindBy(xpath = "//div[contains(@class, 'ak-editor-content-area')]")
     private WebElement descriptionField;
 
+    @FindBy(xpath = "//div[contains(@class, 'ak-editor-content-area')]/div[2]/p")
+    private WebElement descriptionInputField;
+
     @FindBy(xpath = "//button[@data-testid='issue-create.common.ui.footer.create-button']")
     private WebElement createIssueButton;
 
@@ -35,9 +37,10 @@ public class CreateIssuePage extends BasePage{
         summaryField.sendKeys(summary);
     }
 
-    public void enterDescription(WebDriver driver, String text) {
-        JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
-        jsExecutor.executeScript("arguments[0].textContent = arguments[1];", descriptionField, text);
+    public void enterDescription(String description) {
+        Waiters.waitForVisibility(descriptionField);
+        descriptionField.click();
+        descriptionInputField.sendKeys(description);
     }
 
     public WebElement getDescriptionField(){
