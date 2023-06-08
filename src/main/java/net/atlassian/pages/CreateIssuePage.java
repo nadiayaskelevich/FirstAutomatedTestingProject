@@ -1,6 +1,5 @@
 package net.atlassian.pages;
 
-import net.atlassian.utils.Waiters;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -28,30 +27,27 @@ public class CreateIssuePage extends BasePage{
     @FindBy(xpath = "//*[@data-testid='jira-issue-create.modal.create-form.success-flag']")
     private WebElement issueCreatedModal;
 
-    public void clickCreateButton() {
-        createButton.click();
+    public WebElement getCreateButton() {
+        return createButton;
     }
 
-    public void enterSummary(String summary) {
-        Waiters.waitForVisibility(summaryField);
-        summaryField.sendKeys(summary);
+    public WebElement getSummaryField() {
+        return summaryField;
     }
 
-    public void enterDescription(String description) {
-        Waiters.waitForVisibility(descriptionField);
-        descriptionField.click();
-        descriptionInputField.sendKeys(description);
-    }
-
-    public WebElement getDescriptionField(){
+    public WebElement getDescriptionField() {
         return descriptionField;
     }
 
-    public void clickCreateIssueButton() {
-        createIssueButton.click();
+    public WebElement getDescriptionInputField() {
+        return descriptionInputField;
     }
 
-    public boolean createdModalIsDisplayed(){
-        return issueCreatedModal.isDisplayed();
+    public WebElement getCreateIssueButton() {
+        return createIssueButton;
+    }
+
+    public WebElement getIssueCreatedModal() {
+        return issueCreatedModal;
     }
 }

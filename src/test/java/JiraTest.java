@@ -1,24 +1,33 @@
+import lombok.extern.log4j.Log4j2;
+import net.atlassian.driver.DriverManager;
 import net.atlassian.models.IssueData;
-import net.atlassian.pages.CreateIssuePage;
+import net.atlassian.steps.CreateIssueSteps;
 import net.atlassian.pages.SearchFieldPage;
 import net.atlassian.utils.HelpfulActions;
 import net.atlassian.utils.JsonReader;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+@Log4j2
 public class JiraTest extends BaseTest {
 
     protected WebDriver driver;
-    private static final Logger logger = LogManager.getLogger();
-    private SearchFieldPage searchFieldPage = new SearchFieldPage(driver);
-    private CreateIssuePage createIssuePage = new CreateIssuePage(driver);
+    private SearchFieldPage searchFieldPage;
+    private CreateIssueSteps createIssueSteps;
+
+    @BeforeClass
+    public void preparationForTest() {
+        log.info("BeforeClass - preparationForTest");
+        driver = DriverManager.getDriver();
+        searchFieldPage = new SearchFieldPage(driver);
+        createIssueSteps = new CreateIssueSteps(driver);
+    }
 
     @Test
     public void clearSearchField() {
-        logger.info("clearSearchField");
+        log.info("clearSearchField");
 
         searchFieldPage.enterValueInSearchField("value");
         searchFieldPage.clearSearchField();
@@ -29,13 +38,13 @@ public class JiraTest extends BaseTest {
 
     @Test(dataProvider = "issueData", dataProviderClass = JsonReader.class)
     public void createIssue(IssueData issueData) {
-        logger.info("createIssue");
+        log.info("createIssue");
 
-        createIssuePage.clickCreateButton();
-        createIssuePage.enterSummary(issueData.getSummary());
-        createIssuePage.enterDescription(issueData.getDescription());
-        createIssuePage.clickCreateIssueButton();
+        createIssueSteps.clickCreateButton();
+        createIssueSteps.enterSummary(issueData.getSummary());
+        createIssueSteps.enterDescription(issueData.getDescription());
+        createIssueSteps.clickCreateIssueButton();
 
-        Assert.assertTrue(createIssuePage.createdModalIsDisplayed());
+        Assert.assertTrue(createIssueSteps.createdModalIsDisplayed());
     }
 }
