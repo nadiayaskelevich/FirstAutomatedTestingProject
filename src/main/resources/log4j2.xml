@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="INFO">
     <Properties>
-        <Property name="log-path">build/logs</Property>
+        <Property name="log-path">target/logs</Property>
     </Properties>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{ABSOLUTE} %5p - %m%n"/>
         </Console>
-        <RollingFile name="mobile-log" fileName="${log-path}/mobile.log"
-                     filePattern="${log-path}/mobile-%d{yyyy-MM-dd}.log">
+        <RollingFile name="log" fileName="target/logs/tests.log"
+                     filePattern="target/logs/tests-%d{yyyy-MM-dd}.log">
             <PatternLayout>
                 <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss} %c{1} - %msg%n</pattern>
             </PatternLayout>
@@ -20,7 +20,7 @@
     <Loggers>
         <Root level="INFO">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="mobile-log"/>
+            <AppenderRef ref="log"/>
         </Root>
     </Loggers>
 </Configuration>
