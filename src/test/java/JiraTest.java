@@ -1,3 +1,5 @@
+import io.qameta.allure.Description;
+import io.qameta.allure.Feature;
 import lombok.extern.log4j.Log4j2;
 import net.atlassian.driver.DriverManager;
 import net.atlassian.models.IssueData;
@@ -26,6 +28,8 @@ public class JiraTest extends BaseTest {
     }
 
     @Test
+    @Feature(value = "Search")
+    @Description("Check that search field can be cleared clicking cross icon")
     public void clearSearchField() {
         log.info("clearSearchField");
 
@@ -37,6 +41,8 @@ public class JiraTest extends BaseTest {
     }
 
     @Test(dataProvider = "issueData", dataProviderClass = JsonReader.class)
+    @Feature(value = "Issue")
+    @Description("Check that issue with summary and description filled in can be created")
     public void createIssue(IssueData issueData) {
         log.info("createIssue");
 
