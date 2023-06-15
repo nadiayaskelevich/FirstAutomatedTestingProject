@@ -47,4 +47,5 @@ public class CreateIssueSteps {
         log.info("createdModalIsDisplayed");
         return createIssuePage.getIssueCreatedModal().isDisplayed();
     }
+
 }

@@ -1,10 +1,11 @@
 package net.atlassian.pages;
 
-import net.atlassian.utils.Waiters;
+import lombok.Getter;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+@Getter
 public class LoginPage extends BasePage {
 
     public LoginPage (WebDriver driver) {
@@ -22,21 +23,4 @@ public class LoginPage extends BasePage {
     @FindBy(id = "login-submit")
     private WebElement loginButton;
 
-    public void enterEmail(String email) {
-        Waiters.waitForVisibility(emailField);
-        emailField.sendKeys(email);
-    }
-
-    public void clickContinueButton() {
-        continueButton.click();
-    }
-
-    public void enterPassword(String password) {
-        Waiters.waitForVisibility(passwordField);
-        passwordField.sendKeys(password);
-    }
-
-    public void clickLoginButton() {
-        loginButton.click();
-    }
 }

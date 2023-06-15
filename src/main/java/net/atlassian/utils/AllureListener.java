@@ -22,4 +22,5 @@ public class AllureListener implements ITestListener {
 
         return screenshot.getScreenshotAs(OutputType.BYTES);
     }
+
 }

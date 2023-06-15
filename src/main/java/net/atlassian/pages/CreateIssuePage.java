@@ -1,9 +1,11 @@
 package net.atlassian.pages;
 
+import lombok.Getter;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+@Getter
 public class CreateIssuePage extends BasePage{
 
     public CreateIssuePage (WebDriver driver) {
@@ -27,27 +29,4 @@ public class CreateIssuePage extends BasePage{
     @FindBy(xpath = "//*[@data-testid='jira-issue-create.modal.create-form.success-flag']")
     private WebElement issueCreatedModal;
 
-    public WebElement getCreateButton() {
-        return createButton;
-    }
-
-    public WebElement getSummaryField() {
-        return summaryField;
-    }
-
-    public WebElement getDescriptionField() {
-        return descriptionField;
-    }
-
-    public WebElement getDescriptionInputField() {
-        return descriptionInputField;
-    }
-
-    public WebElement getCreateIssueButton() {
-        return createIssueButton;
-    }
-
-    public WebElement getIssueCreatedModal() {
-        return issueCreatedModal;
-    }
 }

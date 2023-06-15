@@ -2,10 +2,7 @@
 # Compiled class file
 *.class
 
-/.idea/
-.idea/*
-
-chromedriver_mac_arm64/
+.idea/
 
 build/
 

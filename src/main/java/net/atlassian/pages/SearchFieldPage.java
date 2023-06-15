@@ -28,5 +28,6 @@ public class SearchFieldPage extends BasePage {
     public String getSearchFieldText() {
         return searchField.getText();
     }
+
 }
 
